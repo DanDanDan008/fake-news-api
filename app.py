@@ -10,13 +10,22 @@ with open("vectorizer.pkl", "rb") as vec_file:
     vectorizer = pickle.load(vec_file)
 
 # 📌 Create FastAPI app
-app = FastAPI()
+app = FastAPI(
+    title="Fake News Detection API",
+    description="API to detect fake news using machine learning",
+    version="1.0.0"
+)
 
 # 📌 Define input data structure
 class NewsItem(BaseModel):
     text: str
 
-# 📌 Define API route
+# 📌 Add home route
+@app.get("/")
+def home():
+    return {"message": "Fake News API is running!"}
+
+# 📌 Define predict API route
 @app.post("/predict/")
 def predict(news_item: NewsItem):
     news_tfidf = vectorizer.transform([news_item.text])
